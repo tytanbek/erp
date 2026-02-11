@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 style="margin-bottom:30px;">📊 Statistika Paneli</h2>
+
+<!-- Statistik kartalar -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:40px;">
+
+    <div class="card">
+        <h4>Jami arizalar</h4>
+        <h2>{{ total_applications }}</h2>
+    </div>
+
+    <div class="card">
+        <h4>Bugungi arizalar</h4>
+        <h2>{{ today_applications }}</h2>
+    </div>
+
+</div>
+
+
+<!-- So‘nggi arizalar -->
+<div class="card" style="margin-bottom:30px;">
+    <h3 style="margin-bottom:20px;">So‘nggi arizalar</h3>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>Ism</th>
+                <th>Yo‘nalish</th>
+                <th>Vaqt</th>
+                <th>Holat</th>
+            </tr>
+
+            {% for app in latest_applications %}
+            <tr>
+                <td>
+                    <a href="{% url 'application_detail' app.id %}"
+                       style="text-decoration:none;color:#2563eb;">
+                        {{ app.full_name }}
+                    </a>
+                </td>
+
+                <td>{{ app.direction.name }}</td>
+                <td>{{ app.time_slot.time }}</td>
+
+                <td>
+                    {% if app.status == "pending" %}
+                        <span class="badge"
+                              style="background:#c7cefe;color:#0e2d92;">
+                            Kutilmoqda
+                        </span>
+
+                    {% elif app.status == "approved" %}
+                        <span class="badge"
+                              style="background:#dcfce7;color:#166534;">
+                            Qabul qilindi
+                        </span>
+
+                    {% elif app.status == "rejected" %}
+                        <span class="badge"
+                              style="background:#fee2e2;color:#991b1b;">
+                            Rad etildi
+                        </span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Arizalar yo‘q</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+<!-- Vaqt bo‘yicha statistika -->
+<div class="card">
+    <h3 style="margin-bottom:20px;">Vaqt bo‘yicha taqsimot</h3>
+
+    <div style="overflow-x:auto;">
+        <table>
+            <tr>
+                <th>Vaqt</th>
+                <th>Arizalar</th>
+            </tr>
+
+            {% for item in by_time %}
+            <tr>
+                <td>{{ item.time_slot__time }}</td>
+                <td>
+                    <span class="badge">
+                        {{ item.total }}
+                    </span>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">Ma'lumot yo‘q</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>O‘qishga ariza topshirish</h2>
+    <br>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <input type="text" name="full_name" placeholder="Ism Familiya" required>
+        <input type="text" name="phone" placeholder="Telefon raqam" required>
+
+        <label>Yo‘nalish</label>
+        <select name="direction">
+            {% for d in directions %}
+            <option value="{{ d.id }}">{{ d.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Vaqt</label>
+        <select name="time_slot">
+            {% for t in time_slots %}
+            <option value="{{ t.id }}">{{ t.time }}</option>
+            {% endfor %}
+        </select>
+
+        <button class="btn btn-primary">Ariza topshirish</button>
+    </form>
+</div>
+
+{% endblock %}

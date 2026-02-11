@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>Ariza ma'lumotlari</h2>
+    <br>
+
+    <p><strong>Ism Familiya:</strong> {{ application.full_name }}</p>
+    <p><strong>Telefon:</strong> {{ application.phone }}</p>
+    <p><strong>Yo‘nalish:</strong> {{ application.direction.name }}</p>
+    <p><strong>Vaqt:</strong> {{ application.time_slot.time }}</p>
+    <p><strong>Yuborilgan vaqt:</strong> {{ application.created_at }}</p>
+
+    <br>
+
+<form method="post">
+    {% csrf_token %}
+
+    <select name="status">
+        <option value="pending" {% if application.status == "pending" %}selected{% endif %}>
+            Kutilmoqda
+        </option>
+
+        <option value="approved" {% if application.status == "approved" %}selected{% endif %}>
+            Qabul qilindi
+        </option>
+
+        <option value="rejected" {% if application.status == "rejected" %}selected{% endif %}>
+            Rad etildi
+        </option>
+    </select>
+
+    <button type="submit" class="btn btn-primary">
+        Saqlash
+    </button>
+</form>
+
+
+    <br>
+
+    {% if application.status == "pending" %}
+        <span class="badge" style="background:#fef3c7;color:#92400e;">
+            Kutilmoqda
+        </span>
+    {% elif application.status == "approved" %}
+        <span class="badge" style="background:#dcfce7;color:#166534;">
+            Qabul qilindi
+        </span>
+    {% else %}
+        <span class="badge" style="background:#fee2e2;color:#991b1b;">
+            Rad etildi
+        </span>
+    {% endif %}
+
+    <br><br>
+
+    <a href="/admindashboard/applications/application/" class="btn btn-secondary">
+        ⬅ Orqaga
+    </a>
+</div>
+
+{% endblock %}
